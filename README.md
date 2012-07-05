@@ -7,7 +7,7 @@ I/O Stream Congestion Meter is a benchmark to measure the effect of multiple con
 
 #An Example#
 <figure>
-  <img src="https://lh5.googleusercontent.com/-9zsrK9hxXvE/T_XGqTgektI/AAAAAAAAAA4/hSbJwuRyL-c/s1024/ioscm_intro.png" title="A Case of I/O Congestion" height="160" width="160" />
+  <img src="https://lh5.googleusercontent.com/-9zsrK9hxXvE/T_XGqTgektI/AAAAAAAAAA4/hSbJwuRyL-c/s1024/ioscm_intro.png" title="A Case of I/O Congestion" height="331" width="480" />
   
   <br><figcaption><b>Figure 1</b> A Case of I/O Congestion</figcaption>
 </figure>
