@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Stream type="UnlimitedWriterBatch" label='UnlimitedWriterBatch'>
+        <number>4</number>
+        <interval>0</interval>
+        <period>16</period>
+        <rsize>65536</rsize>
+        <path>/tmp/</path>
+   </Stream>
+  <Stream type="UnlimitedReaderBatch" label='UnlimitedReaderBatch'>
+        <number>4</number>
+        <interval>0</interval>
+        <period>16</period>
+        <rsize>65536</rsize>
+        <path>/tmp/</path>
+   </Stream>
+</Configuration>

@@ -1,0 +1,58 @@
+<project name="ioscm" default="dist" basedir=".">
+    <description>
+        IOStreamCongestionMeter build file
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="dist"/>
+  <property name="lib" value="lib"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init"
+        description="compile the source " >
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+    <classpath>
+		<pathelement path="lib/"/>
+		<pathelement location="lib/commons-logging-1.1.1.jar"/>
+    	<pathelement location="lib/commons-logging-api-1.0.4.jar"/>
+    	<pathelement location="lib/log4j-1.2.16.jar"/>
+    </classpath>
+    </javac>
+  </target>
+
+  <target name="dist" depends="compile"
+        description="generate the distribution" >
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}/lib"/>
+
+    <!-- Put everything in ${build} into the ioscm-${DSTAMP}.jar file -->
+    <jar jarfile="${dist}/lib/ioscm-${DSTAMP}.jar" basedir="${build}">
+    	<manifest>
+		 	<attribute name="Class-Path" value=". ../../lib/commons-logging-1.1.1.jar ../../lib/commons-logging-api-1.0.4.jar ../../lib/log4j-1.2.16.jar"/>
+			<attribute name="Main-Class" value="org.apache.ioscmeter.CongestionMeter"/>
+		</manifest>
+    </jar>
+  </target>
+ 	
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+
+	<target name="windows">
+		<exec executable="D:/cygwin/bin/bash" newenvironment="false" dir=".">
+			<arg value="tool/windows.sh"/>
+		</exec>
+	</target>
+
+</project>
