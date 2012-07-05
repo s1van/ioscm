@@ -1,0 +1,9 @@
+*.class
+*.swp
+.classpath
+.project
+.settings
+.externalToolBuilders
+bin
+build
+dist
