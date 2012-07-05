@@ -1,5 +1,5 @@
 #Introduction#
-I/O Stream Congestion Meter is a benchmark to measure the effect of multiple concurrent I/O streams on one storage system. Each I/O stream in the benchmark is a squence of interleaving I/O operations and fake computation (Idle). It is part of an effort to understand the performance degradation caused by I/O congestion for file systems like HDFS, PVFS, and ext4. Its features include:
+I/O Stream Congestion Meter is a benchmark to measure the effect of multiple concurrent I/O streams on one storage system. Each I/O stream in the benchmark is a squence of interleaving I/O operations and fake computation (Idle). It is part of an effort to understand the performance degradation (throughput, skew, fairness, ...) caused by I/O congestion for file systems like HDFS, PVFS, and ext4. Its features include:
 
 * Computation-I/O pattern per I/O stream group
 * Fast synchronization for small I/O streams
