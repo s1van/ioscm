@@ -16,7 +16,7 @@ I/O Stream Congestion Meter is a benchmark to measure the effect of multiple con
 ``ant -f build.xml jar``
 
 #HowTo#
-* xml file in ``conf/`` defines the type and parameters for each I/O stream in the testing
+* xml file in ``conf/`` defines the type and parameters for each I/O stream (group) in the testing
 * ``tool/ioscm-conf.py`` is a tool to specify parameters in configuration files
 * scripts in ``tests/`` give detailed usage cases
 
