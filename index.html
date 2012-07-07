@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ioscm by s1van</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Ioscm</h1>
+        <p>I/O Stream Congestion Meter</p>
+
+        <p class="view"><a href="https://github.com/s1van/ioscm">View the Project on GitHub <small>s1van/ioscm</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/s1van/ioscm/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/s1van/ioscm/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/s1van/ioscm">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Introduction</h1>
+
+<p>I/O Stream Congestion Meter is a benchmark to measure the effect of multiple concurrent I/O streams on one storage system. Each I/O stream in the benchmark is a squence of interleaving I/O operations and fake computation (Idle). It is part of an effort to understand the performance degradation (throughput, skew, fairness, ...) caused by I/O congestion for file systems like HDFS, PVFS, and ext4. Its features include:</p>
+
+<ul>
+<li>Computation-I/O pattern per I/O stream group</li>
+<li>Fast synchronization for small I/O streams</li>
+<li>Supports hundreds of concurrent read/write I/O streams</li>
+</ul><h1>An Example</h1>
+
+<img src="https://lh5.googleusercontent.com/-9zsrK9hxXvE/T_XGqTgektI/AAAAAAAAAA4/hSbJwuRyL-c/s1024/ioscm_intro.png" title="A Case of I/O Congestion" height="331" width="480"><br><b>Figure 1</b> A Case of I/O Congestion<h1>Build</h1>
+
+<p><code>ant -f build.xml jar</code></p>
+
+<h1>HowTo</h1>
+
+<ul>
+<li>xml file in <code>conf/</code> defines the type and parameters for each I/O stream (group) in the testing</li>
+<li>
+<code>tool/ioscm-conf.py</code> is a tool to specify parameters in configuration files</li>
+<li>scripts in <code>tests/</code> give detailed usage cases</li>
+</ul><h1>People</h1>
+
+<ul>
+<li>Developer: <a href="http://siyuan.biz">Siyuan Ma</a>
+</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/s1van">s1van</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
