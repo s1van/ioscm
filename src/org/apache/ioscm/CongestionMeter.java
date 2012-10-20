@@ -63,7 +63,7 @@ public class CongestionMeter {
 					
 					String type = sl.getAttribute("type");					
 					elemArg = new Object[] { sl };
-					streamClass = Class.forName("org.apache.ioscmeter." + type);
+					streamClass = Class.forName("org.apache.ioscm." + type);
 					elemArgConstructor = streamClass.getConstructor(elemArgClass);
 					stream = (IOStream) createObject(elemArgConstructor, elemArg);
 					

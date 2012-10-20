@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Configuration>
-  <Stream type="SimpleWriterBatch" label='DataPrep'>
-        <number>4</number>
+<?xml version="1.0" ?><Configuration>
+  <Stream label="DataPrep" type="SimpleWriterBatch">
+        <number>1</number>
         <interval>0</interval>
-        <size>8388608</size>
-        <rsize>8192</rsize>
-        <path>/tmp/</path>
+        <size>8589934592</size>
+        <rsize>8388608</rsize>
+        <path>/home/siyuan/expr/data/</path>
    </Stream>
 </Configuration>

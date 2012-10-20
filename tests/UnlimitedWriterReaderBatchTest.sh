@@ -34,4 +34,4 @@ python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k number -v ${NUM} -l $RLABEL;
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k path -v "${DPATH}/Reader/" -l $RLABEL;
 
 java $JVM_ARGS -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.Log4JLogger \
--Dlog4j.configuration=${ROOT}/conf/log4j.properties -classpath ${ROOT}/dist/lib/${JAR} org.apache.ioscmeter.CongestionMeter -conf ${CONFIG} -tag ${TAG}
+-Dlog4j.configuration=${ROOT}/conf/log4j.properties -classpath ${ROOT}/dist/lib/${JAR} org.apache.ioscm.CongestionMeter -conf ${CONFIG} -tag ${TAG}

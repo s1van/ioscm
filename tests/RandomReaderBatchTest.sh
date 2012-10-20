@@ -15,10 +15,10 @@ then
     exit;
 fi
 
-ROOT="$(dirname $0)/..";
-CONFIG="${ROOT}/conf/UnlimitedWriterBatch.xml";
+ROOT="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../";
+CONFIG="${ROOT}/conf/RandomReaderBatch.xml";
 JAR='ioscm-*.jar';
-LABEL=UnlimitedWriterBatch;
+LABEL=RandomReaderBatch;
 
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k interval -v $INTERVAL -l $LABEL;
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k period -v $PERIOD -l $LABEL;

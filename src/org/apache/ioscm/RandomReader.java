@@ -1,21 +1,24 @@
 package org.apache.ioscm;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.util.Random;
 
 import org.w3c.dom.Element;
 
-public class UnlimitedReader extends IOStream {
+public class RandomReader extends IOStream {
 	String dataPath;
 	int interval; //milliseconds
 	long period; //seconds
 	int rsize; //bytes
+	long max;
+
 	
-	public UnlimitedReader(String dataPath, int interval, long period, int rsize, String label) {
+	public RandomReader(String dataPath, int interval, long period, int rsize, String label) {
 		this.dataPath = dataPath;
 		this.interval = interval;
 		this.period = period;
@@ -23,7 +26,7 @@ public class UnlimitedReader extends IOStream {
 		setLabel(label);
 	}
 	
-	public UnlimitedReader(Element sl) {
+	public RandomReader(Element sl) {
 		dataPath = getTextValue(sl,"path");
 		interval = getIntValue(sl,"interval");
 		period = getLongValue(sl, "period");
@@ -32,30 +35,36 @@ public class UnlimitedReader extends IOStream {
 	}
 	
 	public void run() {
-		LOG.info("UnlimitedReader\t" + "\t" + dataPath + "\t"
+		LOG.info("RandomReader\t" + "\t" + dataPath + "\t"
 				+ Integer.toString(interval) + "\t" + Long.toString(period) + "\t"
 				+ Integer.toString(rsize)); 
 		
-		char[] cbuf = new char[rsize];
+		Random g = new Random();
+		byte[] cbuf = new byte[rsize];
+		
 		try {
-			BufferedReader in = new BufferedReader(new FileReader(dataPath), rsize);
+			RandomAccessFile rf = new RandomAccessFile(new File(dataPath), "r");
+			max = rf.length();
+			
 			sync();
 			long start = System.nanoTime();
-			long cur = 0;
+			long offset = 0;
 			
 			while ((System.nanoTime() - start)/1000000000 <= period ) {
 				timerOn();
-				in.read(cbuf, 0, rsize);
-				timerOff(cur, rsize);
-				cur += rsize;
+				offset = Tools.nextLong(g, max - rsize);
+				rf.seek(offset);
+				rf.read(cbuf);
+			
+				timerOff(offset, rsize);
 				if (interval > 0)
 					synchronized(this){
 						wait(interval);
 					}
-			}			
-			in.close();
-		}
-		catch (FileNotFoundException e) {
+			}
+			rf.close();
+			
+		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -65,6 +74,7 @@ public class UnlimitedReader extends IOStream {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		LOG.info("--UnlimitedReader");
+		
+		LOG.info("--RandomReader");
 	}
 }

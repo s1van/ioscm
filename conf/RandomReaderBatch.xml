@@ -1,0 +1,9 @@
+<?xml version="1.0" ?><Configuration>
+  <Stream label="RandomReaderBatch" type="RandomReaderBatch">
+        <number>32</number>
+        <interval>64</interval>
+        <period>4</period>
+        <rsize>131072</rsize>
+        <path>/home/siyuan/expr/data/</path>
+   </Stream>
+</Configuration>
