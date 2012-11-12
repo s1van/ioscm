@@ -27,6 +27,15 @@ public abstract class IOStream extends Thread{
 				+ Integer.toString(val2));
 	}
 	
+	public void timerOff(long val1, int val2, String op) {
+		e = System.nanoTime();
+		LOG.info("MeterTimer\t" + tag + "\t" + label + "\t" 
+				+ Integer.toString(ID) + "\t" 
+				+ Long.toString(s) + "\t" + Long.toString(e) + "\t" 
+				+ Long.toString(e-s) + "\t" + Long.toString(val1) + "\t"
+				+ Integer.toString(val2) + "\t" + op);
+	}
+	
 	public void buildWall(WaitingWall wall) {
 		this.wall = wall;
 	}

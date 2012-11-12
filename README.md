@@ -20,5 +20,8 @@ I/O Stream Congestion Meter is a benchmark to measure the effect of multiple con
 * ``tool/ioscm-conf.py`` is a tool to specify parameters in configuration files
 * scripts in ``tests/`` give detailed usage cases
 
+#TraceReplayer#
+* Format: "offset(bytes), size(bytes), operation(R,W), wait_after_operation(seconds)"
+
 #People#
 * Developer: [Siyuan Ma](http://siyuan.biz)
