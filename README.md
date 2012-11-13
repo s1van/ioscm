@@ -26,11 +26,11 @@ A TraceReplayer takes a I/O trace file as input, and perform I/O accordingly. Th
 
 To launch multiple TraceReplayers at the same time, one can launch an I/O stream group called TraceReplayerBatch with the following configuration:
 		
-	``	<Stream label="TraceReplayerBatch" type="TraceReplayerBatch">
+		<Stream label="TraceReplayerBatch" type="TraceReplayerBatch">
         	<period>4</period>
         	<dataDir>/expr/data</dataDir>
         	<traceDir>/expr/trace/WebSearch1.spc_s</traceDir>
-		</Stream>``
+		</Stream>
 
 For detailed usage case, please refer to 
 	``tests/TraceReplayerBatchTest.sh``
