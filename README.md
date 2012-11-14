@@ -21,7 +21,7 @@ I/O Stream Congestion Meter is a benchmark to measure the effect of multiple con
 * scripts in ``tests/`` give detailed usage cases
 
 #TraceReplayer#
-A TraceReplayer takes a I/O trace file as input, and perform I/O accordingly. The format of an I/O trace file is
+A TraceReplayer takes an I/O trace file as input, and perform I/O accordingly. The format of an I/O trace file is
 * Trace line format: "offset(bytes), size(bytes), operation, wait_after_operation(seconds)"
 * There're 4 types of operations: R(RandomAccessFile.read), r(block read), W(write), w(write and sync)
 
