@@ -22,7 +22,7 @@ I/O Stream Congestion Meter is a benchmark to measure the effect of multiple con
 
 #TraceReplayer#
 A TraceReplayer takes an I/O trace file as input, and performs I/O accordingly. The format of an I/O trace file is
-* Trace line format: "offset(bytes), size(bytes), operation, wait_after_operation(seconds)"
+* Trace line format: "offset(bytes)|size(bytes)|operation|wait_after_operation(seconds)"
 * There're 4 types of operations: R(RandomAccessFile.read), r(block read), W(write), w(write and sync)
 
 To launch multiple TraceReplayers at the same time, one can launch an I/O stream group called TraceReplayerBatch with the following configuration:
