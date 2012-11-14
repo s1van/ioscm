@@ -73,10 +73,16 @@ public class TraceReplayer extends IOStream {
 			
 				timerOn();
 				rf.seek(offset);
-				if (op.contentEquals("R") || op.contentEquals("r"))
-					rf.read(cbuf);
-				else if (op.contentEquals("W") || op.contentEquals("w"))
+				if (op.contentEquals("R"))
+					rf.read(cbuf);				//blocks until at least one byte of input is available.
+				else if (op.contentEquals("r"))
+					rf.readFully(cbuf); 		//blocks until the requested number of bytes are read
+				else if (op.contentEquals("W") )
 					rf.write(cbuf, 0, rsize);
+				else if (op.contentEquals("w")) {
+					rf.write(cbuf, 0, rsize);
+					rf.getFD().sync();
+				}
 				else
 					;
 				timerOff(offset, rsize, op);
