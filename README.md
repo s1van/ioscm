@@ -33,7 +33,8 @@ To launch multiple TraceReplayers at the same time, one can launch an I/O stream
         	<traceDir>/expr/trace/WebSearch1.spc_s</traceDir>
 		</Stream>
 
-For detailed usage case, please refer to 
+In the above case, ioscm will lauch an I/O stream for each trace file within /expr/trace/WebSearch1.spc_s/. It is required that 
+each trace file has a same name data file inside /expr/data/ before the test starts. In addition, all streams will halt after 4 seconds. For detailed usage case, please refer to 
 	``tests/TraceReplayerBatchTest.sh``
 
 #People#
