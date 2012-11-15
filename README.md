@@ -13,7 +13,7 @@ I/O Stream Congestion Meter is a benchmark to measure the effect of multiple con
 </figure>
 
 #Build#
-``ant -f build.xml jar``
+``ant -f build.xml dist``
 
 #HowTo#
 * xml file in ``conf/`` defines the type and parameters for each I/O stream (group) in the testing
