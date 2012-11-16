@@ -18,11 +18,14 @@ public class TraceReplayer extends IOStream {
 	String tracePath;
 	long period; //seconds
 	long max;
+	long scale;
+	boolean isBlock;
 
-	public TraceReplayer(String dataPath, String tracePath, long period, String label) {
+	public TraceReplayer(String dataPath, String tracePath, long period, String label, boolean isBlock) {
 		this.dataPath = dataPath;
 		this.tracePath = tracePath;
 		this.period = period;
+		this.isBlock = isBlock;
 		setLabel(label);
 	}
 	
@@ -30,10 +33,17 @@ public class TraceReplayer extends IOStream {
 		dataPath = getTextValue(sl,"dataPath");
 		tracePath = getTextValue(sl,"tracePath");
 		period = getLongValue(sl, "period");
+		isBlock = getBoolValue(sl, "isBlock");
 		setLabelFromXML(sl);
 	}
 	
-	public void run() {		
+	public void run() {	
+		if (isBlock){
+			scale = 512;
+		} else {
+			scale = 1;
+		}
+		
 		LOG.info("TraceReplayer\t" + "\t" + dataPath + "\t" + tracePath + "\t"
 				+ "\t" + Long.toString(period)); 
 			
@@ -63,7 +73,7 @@ public class TraceReplayer extends IOStream {
 				args = btrl.split("[|]");
 				
 				//LOG.info("\nER#@R3R#@\t" + btrl + "\t" + args[0] + "\t" + args[1] + "\t" + args[2] + "\t" + args[3]);
-				offset = Long.parseLong(args[0]);
+				offset = Long.parseLong(args[0]) * scale;
 				rsize = Integer.parseInt(args[1]);
 				op = args[2];
 				interval = Math.round( Float.parseFloat(args[3])); //millisecond

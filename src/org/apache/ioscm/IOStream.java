@@ -106,4 +106,11 @@ public abstract class IOStream extends Thread{
 		//in production application you would catch the exception
 		return Long.parseLong(getTextValue(ele,tagName));
 	}
+	
+	protected boolean getBoolValue(Element e, String tagName){
+		String tag = getTextValue(e, tagName);
+		if (tag == null)
+				return false;
+		return Boolean.parseBoolean(tag);
+	}
 }

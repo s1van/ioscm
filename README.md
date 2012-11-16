@@ -22,7 +22,7 @@ I/O Stream Congestion Meter is a benchmark to measure the effect of multiple con
 
 #TraceReplayer#
 A TraceReplayer takes an I/O trace file as input, and performs I/O accordingly. The format of an I/O trace file is
-* Trace line format: "offset(bytes)|size(bytes)|operation|wait_after_operation(seconds)"
+* Trace line format: "offset(bytes, sector)|size(bytes)|operation|wait_after_operation(seconds)"
 * There're 4 types of operations: R(RandomAccessFile.read), r(block read), W(write), w(write and sync)
 
 To launch multiple TraceReplayers at the same time, one can launch an I/O stream group called TraceReplayerBatch with the following configuration:
@@ -31,10 +31,11 @@ To launch multiple TraceReplayers at the same time, one can launch an I/O stream
         	<period>4</period>
         	<dataDir>/expr/data</dataDir>
         	<traceDir>/expr/trace/WebSearch1.spc_s</traceDir>
+		<isBlock>true</isBlock>
 		</Stream>
 
 In the above case, ioscm will launch an I/O stream for each trace file within /expr/trace/WebSearch1.spc_s/. It is required that 
-each trace file has a data file with the same file name inside /expr/data/ before the test starts. In addition, all streams will halt after 4 seconds. For detailed usage case, please refer to 
+each trace file has a data file with the same file name inside /expr/data/ before the test starts. In addition, all streams will halt after 4 seconds, and the offset unit is block(512Bytes). For detailed usage case, please refer to 
 	``tests/TraceReplayerBatchTest.sh``
 
 #People#

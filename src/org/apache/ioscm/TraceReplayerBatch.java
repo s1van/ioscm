@@ -7,6 +7,7 @@ public class TraceReplayerBatch extends IOStream {
 	String dataDir = "/tmp/";
 	String traceDir = "/tmp/";
 	long period = 0; //seconds
+	boolean isBlock = false;
 	int num = 0;
 	
 	public TraceReplayerBatch(long period, String label) {
@@ -18,6 +19,7 @@ public class TraceReplayerBatch extends IOStream {
 		period = getIntValue(sl,"period");
 		dataDir = getTextValue(sl,"dataDir");
 		traceDir = getTextValue(sl,"traceDir");
+		isBlock = getBoolValue(sl, "isBlock");
 		setLabelFromXML(sl);	
 	}
 	
@@ -28,7 +30,7 @@ public class TraceReplayerBatch extends IOStream {
 		for (File trace : tdir.listFiles()) {
 			String dataPath = dataDir + trace.getName();
 			String tracePath = traceDir + trace.getName();
-			launcher.submit(new TraceReplayer(dataPath, tracePath, period, label));
+			launcher.submit(new TraceReplayer(dataPath, tracePath, period, label, isBlock));
 		}
 		usync();
 	}

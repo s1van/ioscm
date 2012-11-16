@@ -2,6 +2,7 @@
   <Stream label="TraceReplayerBatch" type="TraceReplayerBatch">
         <period>16</period>
         <dataDir>/home/siyuan/expr/data/</dataDir>
-        <traceDir>/home/siyuan/expr/trace/WebSearch1.spc_s/</traceDir>
+        <traceDir>/home/siyuan/expr/trace/tiny/</traceDir>
+        <isBlock>true</isBlock>
    </Stream>
 </Configuration>
