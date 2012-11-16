@@ -36,6 +36,11 @@ done
 SC_KEYS=$(cat $TPATH| awk -v c=$C -F"$SEP" '{print $c}'|sort|uniq);
 
 mkdir -p ${TPATH}_s
+
 for key in $SC_KEYS; do
-	cat $TPATH| awk -v c=$C -v key=$key -F"$SEP" 'BEGIN{OFS="|"}{if ($c == key) {$c="\b";print $0;}}' > ${TPATH}_s/${key}
+	if [ "$C" == "1" ]; then 
+		cat $TPATH| awk -v c=$C -v key=$key -F"$SEP" 'BEGIN{OFS="|"}{if ($c == key) {$1="";print $0;}}'| awk '{print substr($1,2);}' > ${TPATH}_s/${key}
+	else
+		cat $TPATH| awk -v c=$C -v key=$key -F"$SEP" 'BEGIN{OFS="|"}{if ($c == key) {$c="\b";print $0;}}' > ${TPATH}_s/${key}
+	fi
 done
