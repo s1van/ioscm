@@ -11,9 +11,18 @@ import java.util.logging.Logger;
 import java.lang.Integer;
 import java.lang.Long;
 
+import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousFileChannel;
+import java.nio.channels.CompletionHandler;
+import java.nio.file.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.EnumSet;
+
 import org.w3c.dom.Element;
 
-public class TraceReplayer extends IOStream {
+public class TraceReplayer7 extends IOStream {
 	String dataPath;
 	String tracePath;
 	long period; //seconds
@@ -21,7 +30,7 @@ public class TraceReplayer extends IOStream {
 	long scale;
 	boolean isBlock;
 
-	public TraceReplayer(String dataPath, String tracePath, long period, String label, boolean isBlock) {
+	public TraceReplayer7(String dataPath, String tracePath, long period, String label, boolean isBlock) {
 		this.dataPath = dataPath;
 		this.tracePath = tracePath;
 		this.period = period;
@@ -29,7 +38,7 @@ public class TraceReplayer extends IOStream {
 		setLabel(label);
 	}
 	
-	public TraceReplayer(Element sl) {
+	public TraceReplayer7(Element sl) {
 		dataPath = getTextValue(sl,"dataPath");
 		tracePath = getTextValue(sl,"tracePath");
 		period = getLongValue(sl, "period");
@@ -38,17 +47,34 @@ public class TraceReplayer extends IOStream {
 	}
 	
 	public void run() {	
+		Path dp=Paths.get(dataPath);
+		ExecutorService pool= new ScheduledThreadPoolExecutor(16);
+
 		if (isBlock){
 			scale = 512;
 		} else {
 			scale = 1;
 		}
 		
-		LOG.info("TraceReplayer\t" + "\t" + dataPath + "\t" + tracePath + "\t"
+		LOG.info("TraceReplayer7\t" + "\t" + dataPath + "\t" + tracePath + "\t"
 				+ "\t" + Long.toString(period)); 
 			
 		
 		try {
+			AsynchronousFileChannel fc=AsynchronousFileChannel.open(dp, EnumSet.of(StandardOpenOption.READ), pool);
+			CompletionHandler<Integer, Long> handler= new CompletionHandler<Integer, Long>(){
+
+				@Override
+				public synchronized void completed(Integer result, Long start) {
+					//OPCompleteEvent();	
+				}		
+
+				@Override
+				public void failed(Throwable exc, Long attachment) {
+    					exc.printStackTrace();
+				}
+			};
+
 			long offset;
 			int rsize = 65536; //bytes
 			String op;
@@ -64,6 +90,7 @@ public class TraceReplayer extends IOStream {
 			
 			RandomAccessFile rf = new RandomAccessFile(new File(dataPath), "rw");
 			max = rf.length();
+
 			
 			sync();
 			long start = System.nanoTime();
@@ -116,7 +143,7 @@ public class TraceReplayer extends IOStream {
 			e.printStackTrace();
 		}
 		
-		LOG.info("--TraceReplayer");
+		LOG.info("--TraceReplayer7");
 	}
 }
 

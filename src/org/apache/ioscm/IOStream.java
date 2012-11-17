@@ -35,6 +35,14 @@ public abstract class IOStream extends Thread{
 				+ Long.toString(e-s) + "\t" + Long.toString(val1) + "\t"
 				+ Integer.toString(val2) + "\t" + op);
 	}
+
+	public void OPCompleteEvent(long s, long e ,long offset, int size, String op) {
+		LOG.info("MeterTimer\t" + tag + "\t" + label + "\t" 
+				+ Integer.toString(ID) + "\t" 
+				+ Long.toString(s) + "\t" + Long.toString(e) + "\t" 
+				+ Long.toString(e-s) + "\t" + Long.toString(offset) + "\t"
+				+ Integer.toString(size) + "\t" + op);
+	}
 	
 	public void buildWall(WaitingWall wall) {
 		this.wall = wall;
