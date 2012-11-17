@@ -62,15 +62,15 @@ public class TraceReplayer7 extends IOStream {
 		
 		try {
 			AsynchronousFileChannel fc=AsynchronousFileChannel.open(dp, EnumSet.of(StandardOpenOption.READ), pool);
-			CompletionHandler<Integer, Long> handler= new CompletionHandler<Integer, Long>(){
+			CompletionHandler<Integer, IOReqWrap> handler= new CompletionHandler<Integer, IOReqWrap>(){
 
 				@Override
-				public synchronized void completed(Integer result, Long start) {
-					//OPCompleteEvent();	
+				public synchronized void completed(Integer result, IOReqWrap req) {
+					//OPCompleteEvent(req.startAt(), System.nanoTime(), req.getOffset(), req.getSize(), req.getOP());	
 				}		
 
 				@Override
-				public void failed(Throwable exc, Long attachment) {
+				public void failed(Throwable exc, IOReqWrap req) {
     					exc.printStackTrace();
 				}
 			};
