@@ -29,7 +29,8 @@ public class TraceReplayer7 extends IOStream {
 	long max;
 	long scale;
 	boolean isBlock;
-	int threadPerTrace;
+	int threadPerTrace = 1;
+	ExecutorService pool;
 	
 	public class IOReqWrap {
 		
@@ -83,12 +84,12 @@ public class TraceReplayer7 extends IOStream {
 		
 	}
 
-	public TraceReplayer7(String dataPath, String tracePath, long period, String label, boolean isBlock, int threadPerTrace) {
+	public TraceReplayer7(String dataPath, String tracePath, long period, String label, boolean isBlock, ExecutorService pool) {
 		this.dataPath = dataPath;
 		this.tracePath = tracePath;
 		this.period = period;
 		this.isBlock = isBlock;
-		this.threadPerTrace = threadPerTrace;
+		this.pool = pool;
 		setLabel(label);
 	}
 	
@@ -103,8 +104,10 @@ public class TraceReplayer7 extends IOStream {
 	
 	public void run() {	
 		Path dp=Paths.get(dataPath);
-		ExecutorService pool= new ScheduledThreadPoolExecutor(threadPerTrace);
-
+		if (pool == null) {
+			pool= new ScheduledThreadPoolExecutor(threadPerTrace);
+		}
+		
 		if (isBlock){
 			scale = 512;
 		} else {

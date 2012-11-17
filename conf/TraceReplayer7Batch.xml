@@ -4,6 +4,6 @@
         <dataDir>/home/siyuan/expr/data//</dataDir>
         <traceDir>/home/siyuan/expr/trace/WebSearch1.spc_s/</traceDir>
         <isBlock>true</isBlock>
-	<threadPerTrace>16</threadPerTrace>
+	<AIOPoolSize>256</AIOPoolSize>
    </Stream>
 </Configuration>

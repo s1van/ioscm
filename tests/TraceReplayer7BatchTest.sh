@@ -17,7 +17,7 @@ JVM_ARGS="-Xmx2048m -XX:MaxPermSize=256m"
 
 if [ $# -lt 6 ]
 then
-	echo "CMD TAG PERIOD DPATH TPATH ISBLK THREAD_PER_TRACE";
+	echo "CMD TAG PERIOD DPATH TPATH ISBLK AIO_THREAD_POOL_SIZE";
     exit;
 fi
 
@@ -30,7 +30,7 @@ python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k period -v $PERIOD -l $LABEL;
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k dataDir -v "${DPATH}/" -l $LABEL;
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k traceDir -v "${TPATH}/" -l $LABEL;
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k isBlock -v "${ISBLK}" -l $LABEL;
-python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k threadPerTrace -v "${TDPT}" -l $LABEL;
+python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k AIOPoolSize -v "${TDPT}" -l $LABEL;
 
 java $JVM_ARGS -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.Log4JLogger \
 	-Dlog4j.configuration=${ROOT}/conf/log4j.properties -classpath ${ROOT}/dist/lib/${JAR} org.apache.ioscm.CongestionMeter -conf ${CONFIG} -tag ${TAG}
