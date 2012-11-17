@@ -29,6 +29,7 @@ public class TraceReplayer7 extends IOStream {
 	long max;
 	long scale;
 	boolean isBlock;
+	int threadPerTrace;
 	
 	public class IOReqWrap {
 		
@@ -82,11 +83,12 @@ public class TraceReplayer7 extends IOStream {
 		
 	}
 
-	public TraceReplayer7(String dataPath, String tracePath, long period, String label, boolean isBlock) {
+	public TraceReplayer7(String dataPath, String tracePath, long period, String label, boolean isBlock, int threadPerTrace) {
 		this.dataPath = dataPath;
 		this.tracePath = tracePath;
 		this.period = period;
 		this.isBlock = isBlock;
+		this.threadPerTrace = threadPerTrace;
 		setLabel(label);
 	}
 	
@@ -95,12 +97,13 @@ public class TraceReplayer7 extends IOStream {
 		tracePath = getTextValue(sl,"tracePath");
 		period = getLongValue(sl, "period");
 		isBlock = getBoolValue(sl, "isBlock");
+		threadPerTrace = getIntValue(sl,"threadPerTrace");
 		setLabelFromXML(sl);
 	}
 	
 	public void run() {	
 		Path dp=Paths.get(dataPath);
-		ExecutorService pool= new ScheduledThreadPoolExecutor(16);
+		ExecutorService pool= new ScheduledThreadPoolExecutor(threadPerTrace);
 
 		if (isBlock){
 			scale = 512;
@@ -113,12 +116,12 @@ public class TraceReplayer7 extends IOStream {
 			
 		
 		try {
-			AsynchronousFileChannel fc=AsynchronousFileChannel.open(dp, EnumSet.of(StandardOpenOption.READ), pool);
+			AsynchronousFileChannel fc=AsynchronousFileChannel.open(dp, EnumSet.of(StandardOpenOption.READ, StandardOpenOption.WRITE), pool);
 			CompletionHandler<Integer, IOReqWrap> handler= new CompletionHandler<Integer, IOReqWrap>(){
 
 				@Override
 				public synchronized void completed(Integer result, IOReqWrap req) {
-					//OPCompleteEvent(req.startAt(), System.nanoTime(), req.getOffset(), req.getSize(), req.getOP());	
+					OPCompleteEvent(req.startAt(), System.nanoTime(), req.getOffset(), req.getSize(), req.getOP());	
 				}		
 
 				@Override
@@ -162,19 +165,28 @@ public class TraceReplayer7 extends IOStream {
 			
 				timerOn();
 				rf.seek(offset);
-				if (op.contentEquals("R"))
-					rf.read(cbuf);				//blocks until at least one byte of input is available.
-				else if (op.contentEquals("r"))
+				if (op.contentEquals("R")) {
+					ByteBuffer buf = ByteBuffer.allocate(rsize);
+					IOReqWrap req = new IOReqWrap(offset, rsize, op, System.nanoTime());
+					fc.read(buf, offset, req, handler);
+				}
+				else if (op.contentEquals("r")) {
 					rf.readFully(cbuf); 		//blocks until the requested number of bytes are read
-				else if (op.contentEquals("W") )
-					rf.write(cbuf, 0, rsize);
+					timerOff(offset, rsize, op);
+				}
+				else if (op.contentEquals("W") ) {
+					ByteBuffer buf = ByteBuffer.allocate(rsize);
+					IOReqWrap req = new IOReqWrap(offset, rsize, op, System.nanoTime());
+					fc.write(buf, offset, req, handler);
+				}
 				else if (op.contentEquals("w")) {
 					rf.write(cbuf, 0, rsize);
 					rf.getFD().sync();
+					timerOff(offset, rsize, op);
 				}
 				else
 					;
-				timerOff(offset, rsize, op);
+				
 				if (interval > 0)
 					synchronized(this){
 						wait(interval);

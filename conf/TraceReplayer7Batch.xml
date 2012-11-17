@@ -1,0 +1,9 @@
+<?xml version="1.0" ?><Configuration>
+  <Stream label="TraceReplayer7Batch" type="TraceReplayer7Batch">
+        <period>16</period>
+        <dataDir>/home/siyuan/expr/data//</dataDir>
+        <traceDir>/home/siyuan/expr/trace/WebSearch1.spc_s/</traceDir>
+        <isBlock>true</isBlock>
+	<threadPerTrace>16</threadPerTrace>
+   </Stream>
+</Configuration>
