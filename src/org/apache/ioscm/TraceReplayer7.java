@@ -153,15 +153,15 @@ public class TraceReplayer7 extends IOStream {
 			sync();
 			long start = System.nanoTime();
 			
-			while ( ( (btrl = btr.readLine()) != null) &&
-					(System.nanoTime() - start)/1000000000 <= period ) {
+			while ( ( (btrl = btr.readLine()) != null) && ( period <= 0 ||
+					(System.nanoTime() - start)/1000000000 <= period )) {
 				args = btrl.split("[|]");
 				
 				//LOG.info("\nER#@R3R#@\t" + btrl + "\t" + args[0] + "\t" + args[1] + "\t" + args[2] + "\t" + args[3]);
 				offset = Long.parseLong(args[0]) * scale;
 				rsize = Integer.parseInt(args[1]);
 				op = args[2];
-				interval = Math.round( Float.parseFloat(args[3])); //millisecond
+				interval = Math.round( Float.parseFloat(args[3]) * 1000); //millisecond
 				
 				if (rsize > cbuf.length) 
 					cbuf = new byte[rsize * 2];
