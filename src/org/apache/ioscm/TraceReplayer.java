@@ -75,6 +75,9 @@ public class TraceReplayer extends IOStream {
 				//LOG.info("\nER#@R3R#@\t" + btrl + "\t" + args[0] + "\t" + args[1] + "\t" + args[2] + "\t" + args[3]);
 				offset = Long.parseLong(args[0]) * scale;
 				rsize = Integer.parseInt(args[1]);
+				if (rsize <= 0 || offset <= 0)
+                                        continue;
+
 				op = args[2];
 				interval = Math.round( Float.parseFloat(args[3]) * 1000); //millisecond
 				
@@ -93,8 +96,8 @@ public class TraceReplayer extends IOStream {
 					rf.write(cbuf, 0, rsize);
 					rf.getFD().sync();
 				}
-				else
-					;
+				else{;}
+					
 				timerOff(offset, rsize, op);
 				if (interval > 0)
 					synchronized(this){
