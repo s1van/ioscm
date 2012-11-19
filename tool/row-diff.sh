@@ -1,6 +1,9 @@
 #!/bin/bash
 
 CMD=`basename $0`;
+TOOLDIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+PYDIFF=$TOOLDIR/row-diff.py;
+
 usage() {
         echo "Usage:    $CMD -p TRACE_PATH -s SEPARATOR -c COLUMN 							"
 		echo "e.g.      $CMD -p mytrace -s '\t' -c 1										"
@@ -32,4 +35,6 @@ do
         esac
 done
 
-sed '1!G;h;$!d' $TPATH| awk -v c=$C -v key=$key -v sep="$SEP" -F"$SEP" 'BEGIN{OFS=sep; lc="NULL"}{if (lc == "NULL") {lc=$c;} else {diff = lc - $c; lc =$c; $c = diff; print $0;}}'| sed '1!G;h;$!d';
+cat $TPATH| $PYDIFF -s $SEP -c $C -d forward -k|awk -v sep=$SEP -v c=$C -F${SEP} 'BEGIN{OFS=sep;} {$c = -$c; print $0}'
+
+#sed '1!G;h;$!d' $TPATH| awk -v c=$C -v key=$key -v sep="$SEP" -F"$SEP" 'BEGIN{OFS=sep; lc="NULL"}{if (lc == "NULL") {lc=$c;} else {diff = lc - $c; lc =$c; $c = diff; print $0;}}'| sed '1!G;h;$!d';
