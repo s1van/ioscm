@@ -20,6 +20,13 @@ def num (s):
 	except ValueError:
 		return float(s)
 
+def is_number(s):
+	try:
+		float(s)
+		return True
+	except ValueError:
+		return False
+
 def main():
 	try:
 		opts, args = getopt.getopt(sys.argv[1:], "hs:d:kc:", ["help", "separator", "direction", "keep", "column"])
@@ -61,6 +68,11 @@ def main():
 		if not inline:
 			break
 		row = inline.split(sep)
+
+		if (len(row) <= col):
+			continue
+		if (not is_number(row[col]) ):
+			continue
 		
 		if (not isForward):					# backward difference
 			if (r == 1):					# first line
