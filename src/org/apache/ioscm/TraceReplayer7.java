@@ -27,10 +27,11 @@ public class TraceReplayer7 extends IOStream {
 	String tracePath;
 	long period; //seconds
 	long max;
-	long scale;
-	boolean isBlock;
+	long blockSize = 1;
 	int threadPerTrace = 1;
 	ExecutorService pool;
+	float iscale;
+	boolean allSync = false;
 	
 	public class IOReqWrap {
 		
@@ -84,11 +85,13 @@ public class TraceReplayer7 extends IOStream {
 		
 	}
 
-	public TraceReplayer7(String dataPath, String tracePath, long period, String label, boolean isBlock, ExecutorService pool) {
+	public TraceReplayer7(String dataPath, String tracePath, long period, String label, int blockSize, boolean allSync, float iscale, ExecutorService pool) {
 		this.dataPath = dataPath;
 		this.tracePath = tracePath;
 		this.period = period;
-		this.isBlock = isBlock;
+		this.blockSize = blockSize;
+		this.allSync = allSync;
+		this.iscale = iscale;
 		this.pool = pool;
 		setLabel(label);
 	}
@@ -97,8 +100,10 @@ public class TraceReplayer7 extends IOStream {
 		dataPath = getTextValue(sl,"dataPath");
 		tracePath = getTextValue(sl,"tracePath");
 		period = getLongValue(sl, "period");
-		isBlock = getBoolValue(sl, "isBlock");
+		blockSize = getIntValue(sl, "blockSize");
 		threadPerTrace = getIntValue(sl,"threadPerTrace");
+		allSync = getBoolValue(sl, "SynchronizeAllOperations");
+		iscale = getFloatValue(sl,"intervalScaleFactor");
 		setLabelFromXML(sl);
 	}
 	
@@ -108,11 +113,6 @@ public class TraceReplayer7 extends IOStream {
 			pool= new ScheduledThreadPoolExecutor(threadPerTrace);
 		}
 		
-		if (isBlock){
-			scale = 512;
-		} else {
-			scale = 1;
-		}
 		
 		LOG.info("TraceReplayer7\t" + "\t" + dataPath + "\t" + tracePath + "\t"
 				+ "\t" + Long.toString(period)); 
@@ -158,12 +158,16 @@ public class TraceReplayer7 extends IOStream {
 				args = btrl.split("[|]");
 				
 				//LOG.info("\nER#@R3R#@\t" + btrl + "\t" + args[0] + "\t" + args[1] + "\t" + args[2] + "\t" + args[3]);
-				offset = Long.parseLong(args[0]) * scale;
+				offset = Long.parseLong(args[0]) * blockSize;
 				rsize = Integer.parseInt(args[1]);
 				if (rsize <= 0 || offset < 0)
 					continue;
+
 				op = args[2];
-				interval = Math.round( Float.parseFloat(args[3]) * 1000); //millisecond
+				if (allSync)
+					op = op.toLowerCase();
+
+				interval = Math.round( Float.parseFloat(args[3]) * 1000 * iscale); //millisecond
 				
 				if (rsize > cbuf.length) 
 					cbuf = new byte[rsize * 2];

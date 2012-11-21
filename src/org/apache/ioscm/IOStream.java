@@ -118,7 +118,14 @@ public abstract class IOStream extends Thread{
 	protected boolean getBoolValue(Element e, String tagName){
 		String tag = getTextValue(e, tagName);
 		if (tag == null)
-				return false;
+			return false;
 		return Boolean.parseBoolean(tag);
+	}
+	
+	protected float getFloatValue(Element e, String tagName){
+		String es = getTextValue(e, tagName);
+		if (es == null)
+			return 1;
+		return Float.parseFloat(es);
 	}
 }

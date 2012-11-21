@@ -18,7 +18,7 @@ public class TraceReplayer extends IOStream {
 	String tracePath;
 	long period; //seconds
 	long max;
-	long scale;
+	long blockSize;
 	boolean isBlock;
 
 	public TraceReplayer(String dataPath, String tracePath, long period, String label, boolean isBlock) {
@@ -39,9 +39,9 @@ public class TraceReplayer extends IOStream {
 	
 	public void run() {	
 		if (isBlock){
-			scale = 512;
+			blockSize = 512;
 		} else {
-			scale = 1;
+			blockSize = 1;
 		}
 		
 		LOG.info("TraceReplayer\t" + "\t" + dataPath + "\t" + tracePath + "\t"
@@ -73,7 +73,7 @@ public class TraceReplayer extends IOStream {
 				args = btrl.split("[|]");
 				
 				//LOG.info("\nER#@R3R#@\t" + btrl + "\t" + args[0] + "\t" + args[1] + "\t" + args[2] + "\t" + args[3]);
-				offset = Long.parseLong(args[0]) * scale;
+				offset = Long.parseLong(args[0]) * blockSize;
 				rsize = Integer.parseInt(args[1]);
 				if (rsize <= 0 || offset < 0)
                                         continue;

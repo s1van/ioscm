@@ -1,9 +1,11 @@
 <?xml version="1.0" ?><Configuration>
   <Stream label="TraceReplayer7Batch" type="TraceReplayer7Batch">
-        <period>16</period>
-        <dataDir>/home/siyuan/test/ioscm/data/</dataDir>
-        <traceDir>/home/siyuan/test/ioscm/trace/</traceDir>
-        <isBlock>false</isBlock>
-	<AIOPoolSize>128</AIOPoolSize>
+        <period>0</period>
+        <dataDir>/home/siyuan/test/ioscm/data//</dataDir>
+        <traceDir>/home/siyuan/test/ioscm/trace/WebSearch1.spc_s//</traceDir>
+        <blockSize>1</blockSize>
+        <intervalScaleFactor>0</intervalScaleFactor>
+	<AIOPoolSize>512</AIOPoolSize>
+        <SynchronizeAllOperations>true</SynchronizeAllOperations>
    </Stream>
 </Configuration>
