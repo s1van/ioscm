@@ -18,8 +18,8 @@ JVM_ARGS="-Xmx2048m -XX:MaxPermSize=256m"
 
 if [ $# -lt 8 ]
 then
-	echo "CMD TAG PERIOD DPATH TPATH BLK_SIZE AIO_THREAD_POOL_SIZE INTERVAL_SCALE_FACTOR SYNC_ALL";
-    exit;
+	echo "CMD TAG PERIOD DPATH TPATH BLK_SIZE AIO_THREAD_POOL_SIZE INTERVAL_SCALE_FACTOR SYNC_MODE";
+	exit;
 fi
 
 ROOT="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../";
@@ -33,7 +33,7 @@ python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k traceDir -v "${TPATH}/" -l $LABE
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k blockSize -v "${BSIZE}" -l $LABEL;
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k AIOPoolSize -v "${TDPT}" -l $LABEL;
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k intervalScaleFactor -v "${ISCALE}" -l $LABEL;
-python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k SynchronizeAllOperations -v "${SYNC}" -l $LABEL;
+python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k SyncMode -v "${SYNC}" -l $LABEL;
 
 java $JVM_ARGS -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.Log4JLogger \
 	-Dlog4j.configuration=${ROOT}/conf/log4j.properties -classpath ${ROOT}/dist/lib/${JAR} org.apache.ioscm.CongestionMeter -conf ${CONFIG} -tag ${TAG}

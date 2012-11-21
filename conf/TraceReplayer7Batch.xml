@@ -6,6 +6,6 @@
         <blockSize>1</blockSize>
         <intervalScaleFactor>0</intervalScaleFactor>
 	<AIOPoolSize>512</AIOPoolSize>
-        <SynchronizeAllOperations>true</SynchronizeAllOperations>
+        <SyncMode>SYNC_ALL</SyncMode>
    </Stream>
 </Configuration>

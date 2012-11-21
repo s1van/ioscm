@@ -13,7 +13,7 @@ public class TraceReplayer7Batch extends IOStream {
 	int blockSize = 1;
 	int aio_pool_size = 1;
 	float iscale = 1;
-        boolean allSync = false;
+        String syncMode= "DEFAULT";
 
 	
 	public TraceReplayer7Batch(long period, String label) {
@@ -29,7 +29,7 @@ public class TraceReplayer7Batch extends IOStream {
 		aio_pool_size = getIntValue(sl,"AIOPoolSize");
 
 		iscale = getFloatValue(sl, "intervalScaleFactor");
-		allSync = getBoolValue(sl, "SynchronizeAllOperations");
+		syncMode = getTextValue(sl, "SyncMode");
 		
 		setLabelFromXML(sl);	
 	}
@@ -42,7 +42,7 @@ public class TraceReplayer7Batch extends IOStream {
 		for (File trace : tdir.listFiles()) {
 			String dataPath = dataDir + trace.getName();
 			String tracePath = traceDir + trace.getName();
-			launcher.submit(new TraceReplayer7(dataPath, tracePath, period, label, blockSize, allSync, iscale, pool));
+			launcher.submit(new TraceReplayer7(dataPath, tracePath, period, label, blockSize, syncMode, iscale, pool));
 		}
 		usync();
 	}

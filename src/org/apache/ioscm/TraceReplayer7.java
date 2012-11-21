@@ -22,7 +22,12 @@ import java.util.EnumSet;
 
 import org.w3c.dom.Element;
 
+
 public class TraceReplayer7 extends IOStream {
+	private enum SyncMode {
+		SYNC_ALL, ASYNC_ALL, DEFAULT;
+	}	
+
 	String dataPath;
 	String tracePath;
 	long period; //seconds
@@ -31,7 +36,7 @@ public class TraceReplayer7 extends IOStream {
 	int threadPerTrace = 1;
 	ExecutorService pool;
 	float iscale;
-	boolean allSync = false;
+	SyncMode syncMode = SyncMode.DEFAULT;
 	
 	public class IOReqWrap {
 		
@@ -85,12 +90,12 @@ public class TraceReplayer7 extends IOStream {
 		
 	}
 
-	public TraceReplayer7(String dataPath, String tracePath, long period, String label, int blockSize, boolean allSync, float iscale, ExecutorService pool) {
+	public TraceReplayer7(String dataPath, String tracePath, long period, String label, int blockSize, String syncMode, float iscale, ExecutorService pool) {
 		this.dataPath = dataPath;
 		this.tracePath = tracePath;
 		this.period = period;
 		this.blockSize = blockSize;
-		this.allSync = allSync;
+		this.syncMode = SyncMode.valueOf(syncMode);
 		this.iscale = iscale;
 		this.pool = pool;
 		setLabel(label);
@@ -102,7 +107,7 @@ public class TraceReplayer7 extends IOStream {
 		period = getLongValue(sl, "period");
 		blockSize = getIntValue(sl, "blockSize");
 		threadPerTrace = getIntValue(sl,"threadPerTrace");
-		allSync = getBoolValue(sl, "SynchronizeAllOperations");
+		syncMode = SyncMode.valueOf(getTextValue(sl, "SyncMode") );
 		iscale = getFloatValue(sl,"intervalScaleFactor");
 		setLabelFromXML(sl);
 	}
@@ -164,8 +169,10 @@ public class TraceReplayer7 extends IOStream {
 					continue;
 
 				op = args[2];
-				if (allSync)
+				if (syncMode == SyncMode.SYNC_ALL)
 					op = op.toLowerCase();
+				else if (syncMode == SyncMode.ASYNC_ALL)
+					op = op.toUpperCase();
 
 				interval = Math.round( Float.parseFloat(args[3]) * 1000 * iscale); //millisecond
 				
