@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class TraceReplayer7Batch extends IOStream {
-	String dataDir = "/tmp/";
+	String dataLoc = "/tmp/";
 	String traceDir = "/tmp/";
 	long period = 0; //seconds
 	int num = 0;
@@ -14,6 +14,7 @@ public class TraceReplayer7Batch extends IOStream {
 	int aio_pool_size = 1;
 	float iscale = 1;
         String syncMode= "DEFAULT";
+	boolean isDir = true;
 
 	
 	public TraceReplayer7Batch(long period, String label) {
@@ -23,7 +24,8 @@ public class TraceReplayer7Batch extends IOStream {
 	
 	public TraceReplayer7Batch(Element sl) {
 		period = getIntValue(sl,"period");
-		dataDir = getTextValue(sl,"dataDir");
+		dataLoc= getTextValue(sl,"dataLocation");
+		isDir = getBoolValue(sl,"dataIsDir");
 		traceDir = getTextValue(sl,"traceDir");
 		blockSize = getIntValue(sl, "blockSize");
 		aio_pool_size = getIntValue(sl,"AIOPoolSize");
@@ -40,8 +42,14 @@ public class TraceReplayer7Batch extends IOStream {
 				+ Long.toString(period) );
 		File tdir = new File(traceDir);
 		for (File trace : tdir.listFiles()) {
-			String dataPath = dataDir + trace.getName();
+			String dataPath;
+			if (isDir) {
+				dataPath = dataLoc + trace.getName();
+			} else {
+				dataPath = dataLoc;
+			}
 			String tracePath = traceDir + trace.getName();
+
 			launcher.submit(new TraceReplayer7(dataPath, tracePath, period, label, blockSize, syncMode, iscale, pool));
 		}
 		usync();
