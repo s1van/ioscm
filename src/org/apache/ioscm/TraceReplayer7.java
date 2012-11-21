@@ -180,13 +180,13 @@ public class TraceReplayer7 extends IOStream {
 					cbuf = new byte[rsize * 2];
 			
 				timerOn();
-				rf.seek(offset);
 				if (op.contentEquals("R")) {
 					ByteBuffer buf = ByteBuffer.allocate(rsize);
 					IOReqWrap req = new IOReqWrap(offset, rsize, op, System.nanoTime());
 					fc.read(buf, offset, req, handler);
 				}
 				else if (op.contentEquals("r")) {
+					rf.seek(offset);
 					rf.readFully(cbuf); 		//blocks until the requested number of bytes are read
 					timerOff(offset, rsize, op);
 				}
@@ -196,6 +196,7 @@ public class TraceReplayer7 extends IOStream {
 					fc.write(buf, offset, req, handler);
 				}
 				else if (op.contentEquals("w")) {
+					rf.seek(offset);
 					rf.write(cbuf, 0, rsize);
 					rf.getFD().sync();
 					timerOff(offset, rsize, op);
