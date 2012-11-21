@@ -8,7 +8,7 @@ TAG=$1;
 PERIOD=$2; #Seconds
 DPATH=$3;
 TPATH=$4;
-ISBLK=$5;
+ISBLK=$(echo $5| tr '[A-Z]' '[a-z]');
 TDPT=$6;
 
 JVM_ARGS="-Xmx2048m -XX:MaxPermSize=256m"
