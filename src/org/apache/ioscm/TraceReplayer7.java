@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.channels.CompletionHandler;
 import java.nio.file.*;
+import java.nio.channels.FileChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -145,13 +146,13 @@ public class TraceReplayer7 extends IOStream {
 			String btrl;
 			String args[];
 			
-			byte[] cbuf = new byte[rsize];
-		
 			File trace = new File(tracePath);
 			FileReader tr = new FileReader(trace);
 			BufferedReader btr  = new BufferedReader(tr, 65536);
 			
 			RandomAccessFile rf = new RandomAccessFile(new File(dataPath), "rw");
+			FileChannel rfc = rf.getChannel();
+			rfc.force(true);
 			max = rf.length();
 
 			
@@ -168,6 +169,7 @@ public class TraceReplayer7 extends IOStream {
 				if (rsize <= 0 || offset < 0)
 					continue;
 
+				ByteBuffer buf = ByteBuffer.allocateDirect(rsize);
 				op = args[2];
 				if (syncMode == SyncMode.SYNC_ALL)
 					op = op.toLowerCase();
@@ -176,29 +178,23 @@ public class TraceReplayer7 extends IOStream {
 
 				interval = Math.round( Float.parseFloat(args[3]) * 1000 * iscale); //millisecond
 				
-				if (rsize > cbuf.length) 
-					cbuf = new byte[rsize * 2];
-			
 				timerOn();
 				if (op.contentEquals("R")) {
-					ByteBuffer buf = ByteBuffer.allocate(rsize);
 					IOReqWrap req = new IOReqWrap(offset, rsize, op, System.nanoTime());
 					fc.read(buf, offset, req, handler);
 				}
 				else if (op.contentEquals("r")) {
-					rf.seek(offset);
-					rf.readFully(cbuf, 0, rsize); 		//blocks until the requested number of bytes are read
+					rfc.position(offset);
+					rfc.read(buf); 		//blocks until the requested number of bytes are read
 					timerOff(offset, rsize, op);
 				}
 				else if (op.contentEquals("W") ) {
-					ByteBuffer buf = ByteBuffer.allocate(rsize);
 					IOReqWrap req = new IOReqWrap(offset, rsize, op, System.nanoTime());
 					fc.write(buf, offset, req, handler);
 				}
 				else if (op.contentEquals("w")) {
-					rf.seek(offset);
-					rf.write(cbuf, 0, rsize);
-					rf.getFD().sync();
+					rfc.position(offset);
+					rfc.write(buf);
 					timerOff(offset, rsize, op);
 				}
 				else

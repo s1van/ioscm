@@ -1,12 +1,12 @@
 <?xml version="1.0" ?><Configuration>
   <Stream label="TraceReplayer7Batch" type="TraceReplayer7Batch">
-        <period>0</period>
-        <dataLocation>/mnt/sdb/expr/ioscm/data/1.dif/</dataLocation>
+        <period>4</period>
+        <dataLocation>/dev/raw/raw1</dataLocation>
         <dataIsDir>false</dataIsDir>
-        <traceDir>/mnt/sdb/expr/ioscm/trace/f.tiny/</traceDir>
+        <traceDir>/home/siv/expr/trace/tiny/</traceDir>
         <blockSize>1</blockSize>
-        <intervalScaleFactor>2</intervalScaleFactor>
-	<AIOPoolSize>10</AIOPoolSize>
-        <SyncMode>ASYNC_ALL</SyncMode>
+        <intervalScaleFactor>1</intervalScaleFactor>
+	<AIOPoolSize>128</AIOPoolSize>
+        <SyncMode>SYNC_ALL</SyncMode>
    </Stream>
 </Configuration>

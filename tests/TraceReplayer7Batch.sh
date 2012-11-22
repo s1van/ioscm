@@ -37,5 +37,5 @@ python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k intervalScaleFactor -v "${ISCALE
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k SyncMode -v "${SYNC}" -l $LABEL;
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k dataIsDir -v "${ISDIR}" -l $LABEL;
 
-java $JVM_ARGS -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.Log4JLogger \
+java -Dsun.nio.PageAlignDirectMemory=true $JVM_ARGS -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.Log4JLogger \
 	-Dlog4j.configuration=${ROOT}/conf/log4j.properties -classpath ${ROOT}/dist/lib/${JAR} org.apache.ioscm.CongestionMeter -conf ${CONFIG} -tag ${TAG}
