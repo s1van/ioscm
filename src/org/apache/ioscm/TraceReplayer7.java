@@ -1,25 +1,32 @@
 package org.apache.ioscm;
 
+import java.lang.Integer;
+import java.lang.Long;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.util.Random;
-import java.util.logging.Logger;
-import java.lang.Integer;
-import java.lang.Long;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.channels.CompletionHandler;
 import java.nio.file.*;
 import java.nio.channels.FileChannel;
+
+import java.util.Random;
+import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.EnumSet;
+
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.EnumSet;
+import java.util.concurrent.Future;
 
 import org.w3c.dom.Element;
 
@@ -155,6 +162,7 @@ public class TraceReplayer7 extends IOStream {
 			rfc.force(true);
 			max = rf.length();
 
+			List<Future<Integer>> futures = new ArrayList<>();
 			
 			sync();
 			long start = System.nanoTime();
@@ -206,6 +214,14 @@ public class TraceReplayer7 extends IOStream {
 					}
 			}
 			
+			for (Future<Integer> future : futures) {
+				try {
+					future.get();
+				} catch (ExecutionException e) {
+					System.out.println("Task wasn't executed!");
+				}
+			}
+
 			rf.close();
 			btr.close();
 			
