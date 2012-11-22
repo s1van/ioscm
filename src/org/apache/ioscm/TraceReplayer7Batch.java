@@ -44,7 +44,7 @@ public class TraceReplayer7Batch extends IOStream {
 		for (File trace : tdir.listFiles()) {
 			String dataPath;
 			if (isDir) {
-				dataPath = dataLoc + trace.getName();
+				dataPath = dataLoc + "/" + trace.getName();
 			} else {
 				dataPath = dataLoc;
 			}
