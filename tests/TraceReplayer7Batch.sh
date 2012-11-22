@@ -29,7 +29,7 @@ JAR='ioscm-*.jar';
 LABEL=TraceReplayer7Batch;
 
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k period -v $PERIOD -l $LABEL;
-python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k dataLocation -v "${DPATH}/" -l $LABEL;
+python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k dataLocation -v "${DPATH}" -l $LABEL;
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k traceDir -v "${TPATH}/" -l $LABEL;
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k blockSize -v "${BSIZE}" -l $LABEL;
 python ${ROOT}/tool/ioscm-conf.py -f $CONFIG -k AIOPoolSize -v "${TDPT}" -l $LABEL;
