@@ -187,7 +187,7 @@ public class TraceReplayer7 extends IOStream {
 				}
 				else if (op.contentEquals("r")) {
 					rf.seek(offset);
-					rf.readFully(cbuf); 		//blocks until the requested number of bytes are read
+					rf.readFully(cbuf, 0, rsize); 		//blocks until the requested number of bytes are read
 					timerOff(offset, rsize, op);
 				}
 				else if (op.contentEquals("W") ) {
