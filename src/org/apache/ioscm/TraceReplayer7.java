@@ -2,6 +2,7 @@ package org.apache.ioscm;
 
 import java.lang.Integer;
 import java.lang.Long;
+import java.lang.IllegalStateException;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -157,9 +158,8 @@ public class TraceReplayer7 extends IOStream {
 			FileReader tr = new FileReader(trace);
 			BufferedReader btr  = new BufferedReader(tr, 65536);
 			
-			RandomAccessFile rf = new RandomAccessFile(new File(dataPath), "rw");
+			RandomAccessFile rf = new RandomAccessFile(new File(dataPath), "rwd");
 			FileChannel rfc = rf.getChannel();
-			rfc.force(true);
 			max = rf.length();
 
 			List<Future<Integer>> futures = new ArrayList<>();
@@ -187,26 +187,32 @@ public class TraceReplayer7 extends IOStream {
 				interval = Math.round( Float.parseFloat(args[3]) * 1000 * iscale); //millisecond
 				
 				timerOn();
-				if (op.contentEquals("R")) {
-					IOReqWrap req = new IOReqWrap(offset, rsize, op, System.nanoTime());
-					fc.read(buf, offset, req, handler);
+				try {
+					if (op.contentEquals("R")) {
+						IOReqWrap req = new IOReqWrap(offset, rsize, op, System.nanoTime());
+						fc.read(buf, offset, req, handler);
+					}
+					else if (op.contentEquals("r")) {
+						rfc.position(offset);
+						rfc.read(buf); 		//get blocked until the requested number of bytes are read
+						rfc.force(false);
+						timerOff(offset, rsize, op);
+					}
+					else if (op.contentEquals("W") ) {
+						IOReqWrap req = new IOReqWrap(offset, rsize, op, System.nanoTime());
+						fc.write(buf, offset, req, handler);
+					}
+					else if (op.contentEquals("w")) {
+						rfc.position(offset);
+						rfc.write(buf);
+						rfc.force(false);
+						timerOff(offset, rsize, op);
+					}
+					else
+						;
+				} catch (IllegalStateException e) {
+					System.out.println("Offset is too large: " + offset);
 				}
-				else if (op.contentEquals("r")) {
-					rfc.position(offset);
-					rfc.read(buf); 		//blocks until the requested number of bytes are read
-					timerOff(offset, rsize, op);
-				}
-				else if (op.contentEquals("W") ) {
-					IOReqWrap req = new IOReqWrap(offset, rsize, op, System.nanoTime());
-					fc.write(buf, offset, req, handler);
-				}
-				else if (op.contentEquals("w")) {
-					rfc.position(offset);
-					rfc.write(buf);
-					timerOff(offset, rsize, op);
-				}
-				else
-					;
 				
 				if (interval > 0)
 					synchronized(this){
