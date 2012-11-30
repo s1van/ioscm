@@ -197,8 +197,6 @@ public class TraceReplayer7 extends IOStream {
 					else if (op.contentEquals("r")) {
 						rfc.position(offset);
 						rfc.read(buf); 		//get blocked until the requested number of bytes are read
-						rfc.force(false);
-						rfd.sync();
 						timerOff(offset, rsize, op);
 					}
 					else if (op.contentEquals("W") ) {
