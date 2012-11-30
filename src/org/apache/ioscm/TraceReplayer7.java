@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.RandomAccessFile;
 
 import java.nio.ByteBuffer;
@@ -159,6 +160,7 @@ public class TraceReplayer7 extends IOStream {
 			BufferedReader btr  = new BufferedReader(tr, 65536);
 			
 			RandomAccessFile rf = new RandomAccessFile(new File(dataPath), "rwd");
+			FileDescriptor rfd = rf.getFD();
 			FileChannel rfc = rf.getChannel();
 			max = rf.length();
 
@@ -196,6 +198,7 @@ public class TraceReplayer7 extends IOStream {
 						rfc.position(offset);
 						rfc.read(buf); 		//get blocked until the requested number of bytes are read
 						rfc.force(false);
+						rfd.sync();
 						timerOff(offset, rsize, op);
 					}
 					else if (op.contentEquals("W") ) {
@@ -206,6 +209,7 @@ public class TraceReplayer7 extends IOStream {
 						rfc.position(offset);
 						rfc.write(buf);
 						rfc.force(false);
+						rfd.sync();
 						timerOff(offset, rsize, op);
 					}
 					else
