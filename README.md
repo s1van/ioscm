@@ -68,7 +68,7 @@ There is also one AsynchronousFileChannel specific option, ``<AIOPoolSize>``. Th
 Raw Device access is a way to bypass OS cache buffers for Java programs. To enable such functionality, the jar package needs to be launched with ``-Dsun.nio.PageAlignDirectMemory=true`` argument. More details can be found in script ``tests/TraceReplayer7Batch.sh``.
 
 #Combine Different Stream Groups#
-It is straightfoward to corun two different groups of streams. ``conf/UnlimitedWriterReaderBatch.xml`` gives an example:
+To corun different groups of streams, one only needs to put their group configurations together. ``conf/UnlimitedWriterReaderBatch.xml`` gives an example:
  	
  	<Stream type="UnlimitedWriterBatch" label='UnlimitedWriterBatch'>
         	<number>4</number>
@@ -85,7 +85,7 @@ It is straightfoward to corun two different groups of streams. ``conf/UnlimitedW
         	<path>/tmp/</path>
    	</Stream>
 
-Note it is required to put different labels on different groups.
+Note that labels on different groups should be different.
 
 #Log#
 By default, **ioscm** dump logs to terminal at runtime. There are two types of messages. 
