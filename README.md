@@ -65,7 +65,7 @@ In addition, two options are supplied to let the user slightly twist the I/O tra
 There is also one AsynchronousFileChannel specific option, ``<AIOPoolSize>``. The value of this tag specifies the size of the thread pool for asynchronous I/O.
 
 ##Raw Device Support##
-Raw Device access is a way to bypass OS cache buffers for Java programs. To enable such functionality, the jar package needs to be launched with ``-Dsun.nio.PageAlignDirectMemory=true`` argument. More details can be found in script ``tests / TraceReplayer7Batch.sh``.
+Raw Device access is a way to bypass OS cache buffers for Java programs. To enable such functionality, the jar package needs to be launched with ``-Dsun.nio.PageAlignDirectMemory=true`` argument. More details can be found in script ``tests/TraceReplayer7Batch.sh``.
 
 #Combine Different Stream Groups#
 It is straightfoward to corun two different groups of streams. ``conf/UnlimitedWriterReaderBatch.xml`` gives an example:
