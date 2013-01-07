@@ -23,20 +23,43 @@ I/O Stream Congestion Meter is a benchmark to measure the effect of multiple con
 #TraceReplayer#
 A TraceReplayer takes an I/O trace file as input, and performs I/O accordingly. The format of an I/O trace file is
 * Trace line format: "offset(bytes, sector)|size(bytes)|operation|wait_after_operation(seconds)"
-* There're 4 types of operations: R(RandomAccessFile.read), r(block read), W(write), w(write and sync)
+* There're 4 types of operations: R(RandomAccessFile.read), r(blocking read), W(write), w(write and sync)
 
 To launch multiple TraceReplayers at the same time, one can launch an I/O stream group called TraceReplayerBatch with the following configuration:
 		
 		<Stream label="TraceReplayerBatch" type="TraceReplayerBatch">
         	<period>4</period>
         	<dataDir>/expr/data</dataDir>
-        	<traceDir>/expr/trace/WebSearch1.spc_s</traceDir>
-		<isBlock>true</isBlock>
+       		<traceDir>/expr/trace/WebSearch1.spc_s</traceDir>
+       		<isBlock>true</isBlock>
 		</Stream>
 
 In the above case, ioscm will launch an I/O stream for each trace file within /expr/trace/WebSearch1.spc_s/. It is required that 
 each trace file has a data file with the same file name inside /expr/data/ before the test starts. In addition, all streams will halt after 4 seconds, and the offset unit is block(512Bytes). For detailed usage case, please refer to 
 	``tests/TraceReplayerBatchTest.sh``
+
+#TraceReplayer7#
+TraceReplayer7 requires Java1.7 and offers a slight different set of I/O operations
+* R(asynchronous read), r(blocking read), W(asynchronous write), w(blocking write and sync)
+
+It also includes more options in its configuration file
+		
+		<Stream label="TraceReplayer7Batch" type="TraceReplayer7Batch">
+        	<period>4</period>
+        	<dataLocation>/dev/raw/raw1</dataLocation>
+        	<dataIsDir>false</dataIsDir>
+        	<traceDir>/home/siv/expr/trace/tiny/</traceDir>
+        	<blockSize>1</blockSize>
+        	<intervalScaleFactor>1</intervalScaleFactor>
+        	<AIOPoolSize>128</AIOPoolSize>
+        	<SyncMode>SYNC_ALL</SyncMode>
+   		</Stream>
+
+Here <traceDir> gives the path of the folder that contains all the I/O trace files. For each trace file, the replayer will then launch a thread for replaying. Besides, <dataLocation> specifies where to access the data, and <dataIsDir> indicates whether the specific locaiton contains one singel file, or a set of files. If false, all launched streams will access the same file concurrently; otherwise, for each trace found in <traceDir>, there must be one data file using the same file name within <dataLocation>.
+
+In addition, two options are supplied to let the user slightly twist the I/O trace at runtime. 
+
+#Combine Different Stream Groups#
 
 #People#
 * Developer: [Siyuan Ma](http://siyuan.biz)
