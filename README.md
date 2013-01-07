@@ -39,9 +39,12 @@ each trace file has a data file with the same file name inside /expr/data/ befor
 	``tests/TraceReplayerBatchTest.sh``
 
 #TraceReplayer7#
+
+##Change from TraceReplayer##
 TraceReplayer7 requires Java1.7 and offers a slight different set of I/O operations
 * R(asynchronous read), r(blocking read), W(asynchronous write), w(blocking write and sync)
 
+##Configuration##
 It also includes more options in its configuration file
 		
 		<Stream label="TraceReplayer7Batch" type="TraceReplayer7Batch">
@@ -55,9 +58,14 @@ It also includes more options in its configuration file
         	<SyncMode>SYNC_ALL</SyncMode>
    		</Stream>
 
-Here <traceDir> gives the path of the folder that contains all the I/O trace files. For each trace file, the replayer will then launch a thread for replaying. Besides, <dataLocation> specifies where to access the data, and <dataIsDir> indicates whether the specific locaiton contains one singel file, or a set of files. If false, all launched streams will access the same file concurrently; otherwise, for each trace found in <traceDir>, there must be one data file using the same file name within <dataLocation>.
+Here ``<traceDir>`` gives the path of the folder that contains all the I/O trace files. For each trace file, the replayer will then launch a thread for replaying. Besides, ``<dataLocation>`` specifies where to access the data, and ``<dataIsDir>`` indicates whether the specific locaiton contains one singel file, or a set of files. If false, all launched streams will access the same file concurrently; otherwise, for each trace found in ``<traceDir>``, there must be one data file using the same file name within ``<dataLocation>``.
 
-In addition, two options are supplied to let the user slightly twist the I/O trace at runtime. 
+In addition, two options are supplied to let the user slightly twist the I/O trace at runtime. ``<intervalScaleFactor>`` allow user to scale the ``wait_after_operation(seconds)`` in trace as needed. For instance, assigning a value 2 would simply double the waiting time. ``<SyncMode>`` is another handy option. Value ``SYNC_ALL`` change all opeations to synchrounous; and value ``ASYNC_ALL`` asynchrounous.
+
+There is also one AsynchronousFileChannel specific option, ``<AIOPoolSize>``. The value of this tag specifies the size of the thread pool for asynchronous I/O.
+
+##Raw Device Support##
+Raw Device access is a way to bypass OS cache buffers for Java programs. To enable such functionality, the jar package needs to be launched with ``-Dsun.nio.PageAlignDirectMemory=true`` argument. More details can be found in script ``tests / TraceReplayer7Batch.sh``.
 
 #Combine Different Stream Groups#
 
