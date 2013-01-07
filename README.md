@@ -45,7 +45,7 @@ TraceReplayer7 requires Java1.7 and offers a slight different set of I/O operati
 * R(asynchronous read), r(blocking read), W(asynchronous write), w(blocking write and sync)
 
 ##Configuration##
-It also includes more options in its configuration file
+More options are included in its configuration file
 		
 		<Stream label="TraceReplayer7Batch" type="TraceReplayer7Batch">
         	<period>4</period>
@@ -68,6 +68,24 @@ There is also one AsynchronousFileChannel specific option, ``<AIOPoolSize>``. Th
 Raw Device access is a way to bypass OS cache buffers for Java programs. To enable such functionality, the jar package needs to be launched with ``-Dsun.nio.PageAlignDirectMemory=true`` argument. More details can be found in script ``tests / TraceReplayer7Batch.sh``.
 
 #Combine Different Stream Groups#
+It is straightfoward to corun two different groups of streams. conf/UnlimitedWriterReaderBatch.xml gives an example:
+ 	
+ 	<Stream type="UnlimitedWriterBatch" label='UnlimitedWriterBatch'>
+        	<number>4</number>
+        	<interval>0</interval>
+        	<period>16</period>
+        	<rsize>65536</rsize>
+        	<path>/tmp/</path>
+   	</Stream>
+  	<Stream type="UnlimitedReaderBatch" label='UnlimitedReaderBatch'>
+        	<number>4</number>
+        	<interval>0</interval>
+        	<period>16</period>
+        	<rsize>65536</rsize>
+        	<path>/tmp/</path>
+   	</Stream>
+
+Note it is required to put different labels on different groups.
 
 #People#
 * Developer: [Siyuan Ma](http://siyuan.biz)
