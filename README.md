@@ -90,10 +90,13 @@ Note it is required to put different labels on different groups.
 #Log#
 By default, **ioscm** dump logs to terminal at runtime. There are two types of messages. 
 * Message on progress. It indicates the state of current I/O stream. It nomarmlly comes with a state message followed by the stream ID. Examples inlcude:
+	
 	``Sync.start	ID``
+	
 	``Sync.end	ID``
 
 * Message for profiling. It has the format:
+	
 	``MeterTimer  tag  label  ID  start_time  end_time  duration  val1  val2  [op]``
 
 #People#
