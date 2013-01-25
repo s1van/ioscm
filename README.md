@@ -40,6 +40,9 @@ each trace file has a data file with the same file name inside /expr/data/ befor
 
 #TraceReplayer7#
 
+##Environment##
+Set the home of JAVA 1.7 in reference to ``conf/ioscm-env.sh``
+
 ##Change from TraceReplayer##
 TraceReplayer7 requires Java1.7 and offers a slightly different set of I/O operations
 * R(asynchronous read), r(blocking read), W(asynchronous write), w(blocking write and sync)
