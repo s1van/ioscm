@@ -103,4 +103,4 @@ By default, **ioscm** dump logs to terminal at runtime. There are two types of m
 	``MeterTimer  tag  label  ID  start_time  end_time  duration  val1  val2  [op]``
 
 #People#
-* Developer: [Siyuan Ma](http://siyuan.biz)
+* Developer: [Siyuan Ma](http://siyuan.biz), [Yin Huai](https://github.com/yhuai)
